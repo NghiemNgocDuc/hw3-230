@@ -6,23 +6,23 @@
 #include "lru.h"
 
 char *make_block(int block_size) {
-  char *block = calloc(block_size, sizeof(char));
+  char *block = (char *)calloc(block_size, sizeof(char));
   return block;
 }
 
 Line *make_lines(int line_count, int block_size) {
-  Line *duc = calloc(line_count, sizeof(Line));
-  for (int i =0; i< line_count; i++){
+  Line *duc = (Line *)calloc(line_count, sizeof(Line));
+  for (int i = 0; i < line_count; i++) {
     duc[i].block = make_block(block_size);
     duc[i].tag = 0;
-    duc[i].valid =0;
+    duc[i].valid = 0;
   }
   return duc;
 }
 
 Set *make_sets(int set_count, int line_count, int block_size) {
-  Set *hanh = calloc(set_count, sizeof(Set));
-  for (int i=0; i<set_count; i++){
+  Set *hanh = (Set *)calloc(set_count, sizeof(Set));
+  for (int i = 0; i < set_count; i++) {
     hanh[i].lines = make_lines(line_count, block_size);
     hanh[i].line_count = line_count;
   }
@@ -30,14 +30,15 @@ Set *make_sets(int set_count, int line_count, int block_size) {
 }
 
 Cache *make_cache(int set_bits, int line_count, int block_bits) {
-  Cache *cache = malloc(sizeof(Cache));
+  Cache *cache = (Cache *)malloc(sizeof(Cache));
   cache->set_bits = set_bits;
   cache->block_bits = block_bits;
   cache->set_count = (int)exp2(set_bits);
   cache->block_size = (int)exp2(block_bits);
   cache->line_count = line_count;
-  cache->sets = make_sets(cache->set_count, line_count, cache->block_size);
+  cache->sets = (Set *)make_sets(cache->set_count, line_count, cache->block_size);
   return cache;
+}
   // Create LRU queues for sets:
   if (cache != NULL) {
     lru_init(cache);
