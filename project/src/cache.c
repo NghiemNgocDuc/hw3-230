@@ -68,11 +68,9 @@ void delete_cache(Cache *cache) {
 
 SearchInfo get_bits(Cache *cache, address_type address) {
   SearchInfo result;
-
-  // TODO:
-  //  Extract the set bits, tag bits, and block bits from a 32-bit address into
-  //    result.
-  //
+  result.offset = address & (cache->block_size - 1);
+  result.set_id = (address >> cache->block_bits) & (cache->set_count - 1);
+  result.tag = address >> (cache->block_bits + cache->set_bits);
   return result;
 }
 
