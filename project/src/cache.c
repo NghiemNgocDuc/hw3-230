@@ -37,14 +37,11 @@ Cache *make_cache(int set_bits, int line_count, int block_bits) {
   cache->block_size = (int)exp2(block_bits);
   cache->line_count = line_count;
   cache->sets = (Set *)make_sets(cache->set_count, line_count, cache->block_size);
-  return cache;
-}
   // Create LRU queues for sets:
   if (cache != NULL) {
     lru_init(cache);
   }
-
-  return cache;
+  return cache;  
 }
 
 void delete_block(char *accessed) { free(accessed); }
