@@ -14,6 +14,7 @@ Line *make_lines(int line_count, int block_size) {
   Line *duc = (Line *)calloc(line_count, sizeof(Line));
   for (int i = 0; i < line_count; i++) {
     duc[i].block = make_block(block_size);
+    duc[i].block_size = block_size;
     duc[i].tag = 0;
     duc[i].valid = 0;
   }
