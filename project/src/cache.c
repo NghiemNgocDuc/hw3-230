@@ -6,41 +6,38 @@
 #include "lru.h"
 
 char *make_block(int block_size) {
-  // TODO:
-  //   Make and initialize a block of memory given the block_size.
-  //   Note that the memory should be initialized with zeros.
-  //
-  return NULL;
+  char *block = calloc(block_size, sizeof(char));
+  return block;
 }
 
 Line *make_lines(int line_count, int block_size) {
-  // TODO:
-  //   Make and initialize the lines given the line count.
-  //   Then make and initialize the blocks using make_block function.
-  //
-  return NULL;
+  Line *duc = calloc(line_count, sizeof(Line));
+  for (int i =0; i< line_count; i++){
+    duc[i].block = make_block(block_size);
+    duc[i].tag = 0;
+    duc[i].valid =0;
+  }
+  return duc;
 }
 
 Set *make_sets(int set_count, int line_count, int block_size) {
-  // TODO:
-  //   Make and initialize the sets given the set count. Then
-  //   make and initialize the lines and blocks.
-  //
-  return NULL;
+  Set *hanh = calloc(set_count, sizeof(Set));
+  for (int i=0; i<set_count; i++){
+    hanh[i].lines = make_lines(line_count, block_size);
+    hanh[i].line_count = line_count;
+  }
+  return hanh;
 }
 
 Cache *make_cache(int set_bits, int line_count, int block_bits) {
-  Cache *cache = NULL;
-  // TODO:
-  //   Make and initialize the cache, sets, lines, and blocks.
-  //   You should use the `exp2` function to determine the
-  //   set_count and block_count from the set_bits and block_bits
-  //   respectively (use `man exp2` from the command line).
-  //
-  // ADD YOUR CODE HERE:
-
-  // END TODO
-
+  Cache *cache = malloc(sizeof(Cache));
+  cache->set_bits = set_bits;
+  cache->block_bits = block_bits;
+  cache->set_count = (int)exp2(set_bits);
+  cache->block_size = (int)exp2(block_bits);
+  cache->line_count = line_count;
+  cache->sets = make_sets(cache->set_count, line_count, cache->block_size);
+  return cache;
   // Create LRU queues for sets:
   if (cache != NULL) {
     lru_init(cache);
