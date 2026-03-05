@@ -30,18 +30,15 @@ Set *make_sets(int set_count, int line_count, int block_size) {
   return hanh;
 }
 
-Cache *make_cache(int set_count, int line_count, int block_size) {
-  Cache *cache = (Cache *)malloc(sizeof(Cache));
-  cache->set_bits = (int)log2(set_count);
-  cache->block_bits = (int)log2(block_size);
-  cache->set_count = set_count;
-  cache->block_size = block_size;
-  cache->line_count = line_count;
-  cache->sets = (Set *)make_sets(cache->set_count, line_count, cache->block_size);
-  if (cache != NULL) {
-    lru_init(cache);
+Line *make_lines(int line_count, int block_size) {
+  Line *duc = (Line *)calloc(line_count, sizeof(Line));
+  for (int i = 0; i < line_count; i++) {
+    duc[i].block = make_block(block_size);
+    duc[i].block_size = block_size;
+    duc[i].tag = 0;
+    duc[i].valid = 0;
   }
-  return cache;
+  return duc;
 }
 
 void delete_block(char *accessed) { free(accessed); }
