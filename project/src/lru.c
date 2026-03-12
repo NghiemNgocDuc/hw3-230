@@ -65,14 +65,14 @@ void lru_fetch(Set *set, unsigned int tag, LRUResult *result) {
   // CONFLICT_MISS 
   if (target_node == NULL) {
     result->access = CONFLICT_MISS;
-    target_node = prev;      
-    target_prev = NULL;       
     LRUNode *p = set->lru_queue;
-    target_prev = NULL;
-    while (p->next != NULL && p->next != target_node) {
+    prev = NULL;
+    while (p->next != NULL) {
+      prev = p;
       p = p->next;
     }
-    target_prev = p;
+    target_node = p;
+    target_prev = prev;
   }
 
   
