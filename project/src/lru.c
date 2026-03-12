@@ -69,8 +69,7 @@ void lru_fetch(Set *set, unsigned int tag, LRUResult *result) {
     target_prev = NULL;       
     LRUNode *p = set->lru_queue;
     target_prev = NULL;
-    while (p->next != target_node) {
-      target_prev = p;
+    while (p->next != NULL && p->next != target_node) {
       p = p->next;
     }
     target_prev = p;
