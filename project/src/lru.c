@@ -63,7 +63,7 @@ void lru_fetch(Set *set, unsigned int tag, LRUResult *result) {
   }
 
   // CONFLICT_MISS 
-  if (result->access != HIT && target_node == NULL) {
+  if (target_node == NULL) {
     result->access = CONFLICT_MISS;
     target_node = prev;      
     target_prev = NULL;       
