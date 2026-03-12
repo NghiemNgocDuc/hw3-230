@@ -83,6 +83,3 @@ AccessResult cache_access(Cache *cache, TraceLine *trace_line) {
   line->block[b] = 1;
   return result.access;
 }
-
-
-read the code and understand it pls
