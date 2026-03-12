@@ -4,12 +4,10 @@
 #include <stdlib.h>
 #include "cpu.h"
 #include "lru.h"
-
 char *make_block(int block_size) {
   char *block = (char *)calloc(block_size, sizeof(char));
   return block;
 }
-
 Line *make_lines(int line_count, int block_size) {
   Line *duc = (Line *)calloc(line_count, sizeof(Line));
   for (int i = 0; i < line_count; i++) {
@@ -20,7 +18,6 @@ Line *make_lines(int line_count, int block_size) {
   }
   return duc;
 }
-
 Set *make_sets(int set_count, int line_count, int block_size) {
   Set *hanh = (Set *)calloc(set_count, sizeof(Set));
   for (int i = 0; i < set_count; i++) {
@@ -29,9 +26,6 @@ Set *make_sets(int set_count, int line_count, int block_size) {
   }
   return hanh;
 }
-
-
-
 Cache *make_cache(int set_count, int line_count, int block_size) {
   Cache *cache = (Cache *)malloc(sizeof(Cache));
   cache->sets = make_sets(set_count, line_count, block_size);
@@ -43,29 +37,24 @@ Cache *make_cache(int set_count, int line_count, int block_size) {
   lru_init(cache);
   return cache;
 }
-
 void delete_block(char *accessed) { free(accessed); }
-
 void delete_lines(Line *lines, int line_count) {
   for (int i = 0; i < line_count; i++) {
     delete_block(lines[i].block);
   }
   free(lines);
 }
-
 void delete_sets(Set *sets, int set_count) {
   for (int i = 0; i < set_count; i++) {
     delete_lines(sets[i].lines, sets[i].line_count);
   }
   free(sets);
 }
-
 void delete_cache(Cache *cache) {
   lru_destroy(cache);
   delete_sets(cache->sets, cache->set_count);
   free(cache);
 }
-
 SearchInfo get_bits(Cache *cache, address_type address) {
   SearchInfo result;
   result.offset = address & (cache->block_size - 1);
@@ -73,30 +62,27 @@ SearchInfo get_bits(Cache *cache, address_type address) {
   result.tag = address >> (cache->block_bits + cache->set_bits);
   return result;
 }
-
 AccessResult cache_access(Cache *cache, TraceLine *trace_line) {
   SearchInfo bits = get_bits(cache, trace_line->address);
   unsigned int s = bits.set_id;
   unsigned int t = bits.tag;
   unsigned int b = bits.offset;
-
   // Get the set:
   Set *set = &cache->sets[s];
-
   // Get the line:
   LRUResult result;
   lru_fetch(set, t, &result);
   Line *line = result.line;
-
   // If it was a miss we will clear the accessed bits:
   if (result.access != HIT) {
     for (int i = 0; i < cache->block_size; i++) {
       line->block[i] = 0;
     }
   }
-
   // Then set the accessed byte to 1:
   line->block[b] = 1;
-
   return result.access;
 }
+
+
+read the code and understand it pls
